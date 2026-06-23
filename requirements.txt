@@ -1,0 +1,40 @@
+# ===== 核心依赖 =====
+torch>=2.0.0
+torchaudio>=2.0.0
+numpy>=1.24.0
+librosa>=0.10.0
+soundfile>=0.12.0
+
+# ===== 模型相关 =====
+transformers>=4.35.0
+huggingface_hub>=0.19.0
+accelerate>=0.25.0
+safetensors>=0.4.0
+
+# ===== 音频处理 =====
+pydub>=0.25.1
+audioread>=3.0.0
+resampy>=0.4.2
+
+# ===== 数据处理 =====
+pyyaml>=6.0
+pandas>=2.0.0
+scipy>=1.11.0
+
+# ===== 训练监控与日志 =====
+tensorboard>=2.15.0
+tqdm>=4.66.0
+matplotlib>=3.8.0
+
+# ===== Web UI =====
+gradio>=4.0.0
+
+# ===== 工具 =====
+click>=8.1.0
+rich>=13.0.0
+loguru>=0.7.0
+psutil>=5.9.0
+
+# ===== 测试 =====
+pytest>=7.4.0
+pytest-cov>=4.1.0

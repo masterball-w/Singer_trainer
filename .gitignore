@@ -1,0 +1,159 @@
+# ============================================================
+# QS Music - .gitignore
+# ============================================================
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+*.so
+
+# ---- Virtual Environments ----
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+python_embeded/
+
+# ---- IDE ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.spyderproject
+.spyproject
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Environment & Secrets ----
+.env
+.envrc
+.env.local
+config.json
+proxy_config.txt
+*.secret
+*.key
+.pypirc
+
+# ============================================================
+# Model Weights & Checkpoints (download separately, see README)
+# ============================================================
+checkpoints/
+ace_step/checkpoints/
+audiox_turbo/checkpoints/
+checkpoints_legacy/
+checkpoints_pack/
+lora_output/
+lokr_output/
+acestep_output/
+*.safetensors
+*.ckpt
+*.pth
+*.bin
+*.pt
+*.dff
+*.dsf
+
+# HuggingFace cache
+hf_cache/
+.cache/
+*/.cache/
+
+# ============================================================
+# Datasets (Copyright - DO NOT UPLOAD)
+# ============================================================
+music_dataset/raw/*
+music_dataset/processed/*
+music_dataset/slices/*
+!music_dataset/raw/.gitkeep
+!music_dataset/processed/.gitkeep
+!music_dataset/slices/.gitkeep
+
+# ACE-Step training data
+ace_step/data/
+ace_step/datasets/
+
+# ============================================================
+# Generated Audio (DO NOT UPLOAD)
+# ============================================================
+generated_samples/
+generated_songs/
+outputs/
+ace_step/generated_songs/
+audiox_turbo/generated_song_genshin/
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.aac
+*.m4a
+*.opus
+
+# Exclude potential (c) training data
+*_lyrics.txt
+AlbumArt*.jpg
+Folder.jpg
+
+# ============================================================
+# Logs & Cache
+# ============================================================
+logs/
+*.log
+*.tmp
+*.bak
+tensorboard/
+gradio_outputs/
+flow_edit_test_outputs/
+retake_test_outputs/
+torchinductor_root/
+.history/
+tmp*
+
+# ---- Testing ----
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# ---- Jupyter ----
+.ipynb_checkpoints/
+playground.ipynb
+
+# ---- Node ----
+node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+package-lock.json
+
+# ---- Misc ----
+upload_checkpoints.sh
+checkpoints.7z
+README_old.md
+discord_bot/
+feishu_bot/
+issues/
+PortableGit/
+.claude/skills/acestep/scripts/config.json
+.claude/skills/acestep/scripts/.first_gen_done
+.claude/skills/acestep-simplemv/scripts/public/
+.claude/scheduled_tasks.lock
+.claude/worktrees/
+
+# Keep directory structure
+!**/.gitkeep
