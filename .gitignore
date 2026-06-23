@@ -51,7 +51,6 @@ proxy_config.txt
 # ============================================================
 checkpoints/
 ace_step/checkpoints/
-audiox_turbo/checkpoints/
 checkpoints_legacy/
 checkpoints_pack/
 lora_output/
@@ -91,7 +90,6 @@ generated_samples/
 generated_songs/
 outputs/
 ace_step/generated_songs/
-audiox_turbo/generated_song_genshin/
 *.wav
 *.mp3
 *.flac

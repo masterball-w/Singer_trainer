@@ -1,10 +1,10 @@
 # QS Music - 音乐风格学习与生成系统
 
-基于深度学习的音乐风格学习与生成平台，集成 MusicGen 微调训练、ACE-Step v1.5 高质量音乐生成、AudioX-Turbo 快速音频生成三大引擎，提供从数据管理到模型训练、风格融合和音乐生成的完整工作流。
+基于深度学习的音乐风格学习与生成平台，集成 MusicGen 微调训练与 ACE-Step v1.5 高质量音乐生成两大引擎，提供从数据管理到模型训练、风格融合和音乐生成的完整工作流。
 
 ## 项目特性
 
-- **多引擎支持**：集成 MusicGen（微调训练）、ACE-Step v1.5（DiT 扩散生成）、AudioX-Turbo（4步快速生成）
+- **双引擎支持**：集成 MusicGen（微调训练）与 ACE-Step v1.5（DiT 扩散生成）
 - **风格学习**：通过自有数据集微调模型，学习特定歌手/曲风的音乐特征
 - **高质量生成**：ACE-Step base 模型支持 50 步扩散推理 + CFG 引导 + ADG 双引导，生成清晰人声和丰富编曲
 - **数据集管理**：支持音频导入、格式统一、采样率标准化、音频切片等预处理
@@ -53,11 +53,6 @@ qsmusic/
 │   ├── scripts/                    # 工具脚本
 │   ├── checkpoints/                # 模型权重（需单独下载）
 │   └── README.md                   # ACE-Step 官方文档
-├── audiox_turbo/                   # AudioX-Turbo 音频生成模型
-│   ├── audiox_turbo/               # 核心 Python 包
-│   ├── configs/                    # 模型配置
-│   ├── checkpoints/                # 模型权重（需单独下载）
-│   └── README.md                   # AudioX-Turbo 文档
 ├── music_dataset/                  # 音乐数据集（需自行准备）
 │   ├── raw/                        # 原始音频文件
 │   ├── processed/                  # 预处理后的音频
@@ -110,17 +105,9 @@ uv sync
 cd ..
 ```
 
-#### AudioX-Turbo 子项目
-
-```bash
-cd audiox_turbo
-pip install -r requirements.txt
-cd ..
-```
-
 ### 3. 下载模型权重
 
-由于模型权重文件较大（总计约 60GB），不包含在 Git 仓库中。请按以下指南下载并放置到指定位置。
+由于模型权重文件较大（总计约 24GB），不包含在 Git 仓库中。请按以下指南下载并放置到指定位置。
 
 #### 3.1 ACE-Step v1.5 模型
 
@@ -165,19 +152,10 @@ git clone https://huggingface.co/ACE-Step/acestep-v15-base checkpoints/acestep-v
 python scripts/cli.py model download musicgen-small
 
 # 或从 HuggingFace 下载
-huggingface-cli download facebook/musicgen-small --local-dir checkpoints/pretrained/musicgen-small
+huggingface-cli download facebook/musicgen-small --local-dir checkpoints/pretrained/musicgen-small-hf
 ```
 
-**放置位置**：`checkpoints/pretrained/musicgen-small/`
-
-#### 3.3 AudioX-Turbo 模型
-
-```bash
-cd audiox_turbo
-# 参考 audiox_turbo/README.md 获取下载说明
-```
-
-**放置位置**：`audiox_turbo/checkpoints/`
+**放置位置**：`checkpoints/pretrained/musicgen-small-hf/`
 
 ### 4. 准备数据集
 
@@ -359,7 +337,6 @@ python scripts/cli.py ui --port 7860
 | musicgen-large | 3.3B | 最佳生成质量 | MIT |
 | acestep-v15-base | 2B | DiT 扩散，高质量 | MIT |
 | acestep-v15-turbo | 2B | DiT 扩散，8步快速 | MIT |
-| audiox-turbo | - | 4步快速音频生成 | CC-BY-NC 4.0 |
 
 ## 高级用法
 
@@ -369,7 +346,7 @@ python scripts/cli.py ui --port 7860
 from generation.generator import MusicGenerator
 
 generator = MusicGenerator(architecture="musicgen", model_name="musicgen-small")
-generator.load_model("./checkpoints/pretrained/musicgen-small")
+generator.load_model("./checkpoints/pretrained/musicgen-small-hf")
 
 audio = generator.generate(
     prompt="a peaceful piano melody with nature sounds",
@@ -418,7 +395,6 @@ pytest tests/ -v --cov=.
 
 - **QS Music 主项目**：MIT License
 - **ACE-Step v1.5**：MIT License（见 `ace_step/README.md`）
-- **AudioX-Turbo**：CC-BY-NC 4.0（非商用，见 `audiox_turbo/LICENSE`）
 - **MusicGen**：MIT License（Facebook/Meta）
 
 本项目仅供学习和研究使用。使用第三方模型时，请遵循各模型自身的许可证。训练数据请确保具有合法授权。
