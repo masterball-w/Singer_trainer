@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QS Music - 音乐风格学习与生成系统</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">🎵</div>
+                <div class="logo-text">
+                    <h1>QS Music</h1>
+                    <span>音乐AI平台</span>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="generate">
+                    <span class="nav-icon">🎼</span>
+                    <span>音乐生成</span>
+                </button>
+                <button class="nav-item" data-tab="training">
+                    <span class="nav-icon">🧠</span>
+                    <span>模型训练</span>
+                </button>
+                <button class="nav-item" data-tab="dataset">
+                    <span class="nav-icon">📁</span>
+                    <span>数据集管理</span>
+                </button>
+                <button class="nav-item" data-tab="models">
+                    <span class="nav-icon">🤖</span>
+                    <span>模型管理</span>
+                </button>
+                <button class="nav-item" data-tab="tasks">
+                    <span class="nav-icon">📋</span>
+                    <span>任务监控</span>
+                </button>
+                <button class="nav-item" data-tab="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>系统设置</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="server-status" id="serverStatus">
+                    <div class="status-dot"></div>
+                    <span>服务器连接中...</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <h2 id="pageTitle">音乐生成</h2>
+                    <p id="pageDesc">使用AI生成高质量音乐作品</p>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-secondary" id="refreshBtn">🔄 刷新</button>
+                    <button class="btn btn-primary" id="quickGenerate">⚡ 快速生成</button>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <div class="tab-content active" id="tab-generate">
+                    <div class="generate-layout">
+                        <div class="generate-main">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>🎤 基础参数</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group full-width">
+                                        <label>音乐描述 (Prompt)</label>
+                                        <textarea id="genPrompt" rows="3" placeholder="描述你想要的音乐风格，例如：欢快的流行歌曲，带有电子合成器和鼓点"></textarea>
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label>歌词 (Lyrics)</label>
+                                        <textarea id="genLyrics" rows="4" placeholder="输入歌词，支持 [Verse]、[Chorus] 等标签"></textarea>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>人声语言</label>
+                                            <select id="genLanguage">
+                                                <option value="en">English</option>
+                                                <option value="zh" selected>中文</option>
+                                                <option value="ja">日本語</option>
+                                                <option value="ko">한국어</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>输出格式</label>
+                                            <select id="genFormat">
+                                                <option value="mp3" selected>MP3</option>
+                                                <option value="wav">WAV (无损)</option>
+                                                <option value="flac">FLAC</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header collapsible" data-collapse="musicProps">
+                                    <h3>🎹 音乐属性</h3>
+                                    <span class="collapse-icon">▼</span>
+                                </div>
+                                <div class="card-body" id="collapse-musicProps">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>BPM (节奏)</label>
+                                            <input type="number" id="genBpm" placeholder="自动" min="30" max="300">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>调性</label>
+                                            <select id="genKey">
+                                                <option value="">自动检测</option>
+                                                <option value="C Major">C Major</option>
+                                                <option value="C Minor">C Minor</option>
+                                                <option value="C# Major">C# Major</option>
+                                                <option value="C# Minor">C# Minor</option>
+                                                <option value="D Major">D Major</option>
+                                                <option value="D Minor">D Minor</option>
+                                                <option value="D# Major">D# Major</option>
+                                                <option value="D# Minor">D# Minor</option>
+                                                <option value="E Major">E Major</option>
+                                                <option value="E Minor">E Minor</option>
+                                                <option value="F Major">F Major</option>
+                                                <option value="F Minor">F Minor</option>
+                                                <option value="F# Major">F# Major</option>
+                                                <option value="F# Minor">F# Minor</option>
+                                                <option value="G Major">G Major</option>
+                                                <option value="G Minor">G Minor</option>
+                                                <option value="G# Major">G# Major</option>
+                                                <option value="G# Minor">G# Minor</option>
+                                                <option value="A Major">A Major</option>
+                                                <option value="A Minor">A Minor</option>
+                                                <option value="A# Major">A# Major</option>
+                                                <option value="A# Minor">A# Minor</option>
+                                                <option value="B Major">B Major</option>
+                                                <option value="B Minor">B Minor</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>拍号</label>
+                                            <select id="genTimeSignature">
+                                                <option value="">自动</option>
+                                                <option value="2">2/4</option>
+                                                <option value="3">3/4</option>
+                                                <option value="4" selected>4/4</option>
+                                                <option value="6">6/8</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>时长 (秒): <span id="durationValue">95</span></label>
+                                            <input type="range" id="genDuration" min="10" max="600" value="95" step="5">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>生成数量: <span id="batchValue">2</span></label>
+                                            <input type="range" id="genBatch" min="1" max="8" value="2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header collapsible" data-collapse="modelSettings">
+                                    <h3>⚙️ 模型与推理设置</h3>
+                                    <span class="collapse-icon">▼</span>
+                                </div>
+                                <div class="card-body" id="collapse-modelSettings">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>选择模型</label>
+                                            <select id="genModel">
+                                                <option value="">默认模型</option>
+                                                <option value="acestep-v15-base">acestep-v15-base (高质量)</option>
+                                                <option value="acestep-v15-turbo" selected>acestep-v15-turbo (快速)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>任务类型</label>
+                                            <select id="genTaskType">
+                                                <option value="text2music" selected>文本生成音乐</option>
+                                                <option value="cover">翻唱</option>
+                                                <option value="repaint">重绘/混音</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>推理步数: <span id="stepsValue">8</span></label>
+                                            <input type="range" id="genSteps" min="1" max="100" value="8">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>CFG引导系数: <span id="guidanceValue">7.0</span></label>
+                                            <input type="range" id="genGuidance" min="1" max="20" value="7" step="0.5">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Shift偏移: <span id="shiftValue">3.0</span></label>
+                                            <input type="range" id="genShift" min="1" max="5" value="3" step="0.1">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>采样方法</label>
+                                            <select id="genInferMethod">
+                                                <option value="ode" selected>ODE (Euler, 更快)</option>
+                                                <option value="sde">SDE (随机, 更多样)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row checkbox-row">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="genUseAdg">
+                                            <span>启用ADG自适应双引导 (仅base模型)</span>
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="genThinking" checked>
+                                            <span>启用LM增强 (thinking)</span>
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="genUseFormat">
+                                            <span>LM格式化输入</span>
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="genRandomSeed" checked>
+                                            <span>随机种子</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-row" id="seedRow" style="display: none;">
+                                        <div class="form-group">
+                                            <label>指定种子</label>
+                                            <input type="number" id="genSeed" value="-1">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header collapsible" data-collapse="lmSettings">
+                                    <h3>🧠 LM语言模型设置</h3>
+                                    <span class="collapse-icon">▼</span>
+                                </div>
+                                <div class="card-body" id="collapse-lmSettings">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>LM温度: <span id="lmTempValue">0.85</span></label>
+                                            <input type="range" id="genLmTemp" min="0" max="2" value="0.85" step="0.05">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>LM CFG: <span id="lmCfgValue">2.5</span></label>
+                                            <input type="range" id="genLmCfg" min="1" max="10" value="2.5" step="0.1">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>LM Top-P: <span id="lmTopPValue">0.9</span></label>
+                                            <input type="range" id="genLmTopP" min="0" max="1" value="0.9" step="0.05">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>重复惩罚: <span id="lmRepPenValue">1.0</span></label>
+                                            <input type="range" id="genLmRepPen" min="1" max="2" value="1" step="0.05">
+                                        </div>
+                                    </div>
+                                    <div class="form-row checkbox-row">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="genCotCaption" checked>
+                                            <span>CoT增强提示词</span>
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="genCotLanguage" checked>
+                                            <span>CoT检测语言</span>
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="genConstrained" checked>
+                                            <span>约束解码</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header collapsible" data-collapse="refAudio">
+                                    <h3>🎵 参考音频 (可选)</h3>
+                                    <span class="collapse-icon">▼</span>
+                                </div>
+                                <div class="card-body" id="collapse-refAudio">
+                                    <div class="form-group full-width">
+                                        <label>上传参考音频</label>
+                                        <div class="upload-area" id="refAudioUpload">
+                                            <input type="file" id="refAudioFile" accept="audio/*" style="display: none;">
+                                            <div class="upload-placeholder">
+                                                <span class="upload-icon">📁</span>
+                                                <p>点击或拖拽上传参考音频文件</p>
+                                                <span class="upload-hint">支持 WAV, MP3, FLAC, OGG, M4A</span>
+                                            </div>
+                                        </div>
+                                        <div id="refAudioInfo" style="display: none;">
+                                            <p><strong>文件:</strong> <span id="refAudioName"></span></p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label>上传源音频 (用于翻唱/重绘)</label>
+                                        <div class="upload-area" id="srcAudioUpload">
+                                            <input type="file" id="srcAudioFile" accept="audio/*" style="display: none;">
+                                            <div class="upload-placeholder">
+                                                <span class="upload-icon">📁</span>
+                                                <p>点击或拖拽上传源音频文件</p>
+                                                <span class="upload-hint">支持 WAV, MP3, FLAC, OGG, M4A</span>
+                                            </div>
+                                        </div>
+                                        <div id="srcAudioInfo" style="display: none;">
+                                            <p><strong>文件:</strong> <span id="srcAudioName"></span></p>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>翻唱/风格迁移强度: <span id="coverStrengthValue">1.0</span></label>
+                                            <input type="range" id="genCoverStrength" min="0" max="1" value="1" step="0.05">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>重绘开始时间 (秒)</label>
+                                            <input type="number" id="genRepaintStart" value="0" min="0" step="0.1">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>重绘结束时间 (秒, -1=到结尾)</label>
+                                            <input type="number" id="genRepaintEnd" value="-1" step="0.1">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header collapsible" data-collapse="advancedDit">
+                                    <h3>🔧 高级DiT参数</h3>
+                                    <span class="collapse-icon">▼</span>
+                                </div>
+                                <div class="card-body" id="collapse-advancedDit">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>CFG起始比例: <span id="cfgStartValue">0.0</span></label>
+                                            <input type="range" id="genCfgStart" min="0" max="1" value="0" step="0.05">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>CFG结束比例: <span id="cfgEndValue">1.0</span></label>
+                                            <input type="range" id="genCfgEnd" min="0" max="1" value="1" step="0.05">
+                                        </div>
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label>自定义时间步 (逗号分隔, 覆盖步数和shift)</label>
+                                        <input type="text" id="genTimesteps" placeholder="例如: 0.97,0.76,0.615,0.5,0.395,0.28,0.18,0.085,0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="generate-sidebar">
+                            <div class="card sticky-card">
+                                <div class="card-header">
+                                    <h3>🚀 生成控制</h3>
+                                </div>
+                                <div class="card-body">
+                                    <button class="btn btn-primary btn-large full-width" id="generateBtn">
+                                        🎵 开始生成
+                                    </button>
+                                    <button class="btn btn-secondary full-width" id="randomSampleBtn">
+                                        🎲 随机示例
+                                    </button>
+                                    <button class="btn btn-secondary full-width" id="formatInputBtn">
+                                        ✨ 格式化输入
+                                    </button>
+                                    <div class="divider"></div>
+                                    <div class="preset-section">
+                                        <h4>快速预设</h4>
+                                        <div class="preset-buttons">
+                                            <button class="preset-btn" data-preset="pop">流行</button>
+                                            <button class="preset-btn" data-preset="rock">摇滚</button>
+                                            <button class="preset-btn" data-preset="jazz">爵士</button>
+                                            <button class="preset-btn" data-preset="classical">古典</button>
+                                            <button class="preset-btn" data-preset="electronic">电子</button>
+                                            <button class="preset-btn" data-preset="hiphop">嘻哈</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>📊 当前任务</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="currentTask" class="no-task">
+                                        <p>暂无进行中的任务</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-training">
+                    <div class="training-layout">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>🎯 训练配置</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="training-tabs">
+                                    <button class="training-tab active" data-train-tab="lora">LoRA训练</button>
+                                    <button class="training-tab" data-train-tab="lokr">LoKr训练</button>
+                                </div>
+
+                                <div class="train-panel active" id="train-lora">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>训练类型</label>
+                                            <select id="trainMethod">
+                                                <option value="vanilla" selected>标准LoRA</option>
+                                                <option value="fixed">Fixed LoRA</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>预设配置</label>
+                                            <select id="trainPreset">
+                                                <option value="quick_test">快速测试</option>
+                                                <option value="recommended" selected>推荐配置</option>
+                                                <option value="vram_8gb">8GB显存</option>
+                                                <option value="vram_12gb">12GB显存</option>
+                                                <option value="vram_16gb">16GB显存</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <h4 class="section-title">📁 数据集设置</h4>
+                                    <div class="form-group full-width">
+                                        <label>数据集路径</label>
+                                        <div class="path-input">
+                                            <input type="text" id="trainDatasetPath" placeholder="./music_dataset/processed">
+                                            <button class="btn btn-secondary">浏览</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>输出目录</label>
+                                            <input type="text" id="trainOutputDir" value="./checkpoints/lora_output">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>LoRA名称</label>
+                                            <input type="text" id="trainLoraName" placeholder="my_style_lora">
+                                        </div>
+                                    </div>
+
+                                    <h4 class="section-title">🧬 LoRA参数</h4>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Rank (秩): <span id="loraRankValue">64</span></label>
+                                            <input type="range" id="loraRank" min="4" max="256" value="64">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Alpha: <span id="loraAlphaValue">128</span></label>
+                                            <input type="range" id="loraAlpha" min="4" max="512" value="128">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Dropout: <span id="loraDropoutValue">0.1</span></label>
+                                            <input type="range" id="loraDropout" min="0" max="0.5" value="0.1" step="0.01">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>目标模块</label>
+                                            <input type="text" id="loraTargetModules" value="q_proj k_proj v_proj o_proj">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>注意力类型</label>
+                                            <select id="loraAttentionType">
+                                                <option value="both" selected>全部 (Both)</option>
+                                                <option value="self">仅自注意力</option>
+                                                <option value="cross">仅交叉注意力</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Bias类型</label>
+                                            <select id="loraBias">
+                                                <option value="none" selected>None</option>
+                                                <option value="all">All</option>
+                                                <option value="lora_only">LoRA Only</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <h4 class="section-title">📊 训练超参数</h4>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>学习率</label>
+                                            <input type="number" id="trainLR" value="0.0001" step="0.00001" min="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Batch Size</label>
+                                            <input type="number" id="trainBatchSize" value="1" min="1">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>梯度累积: <span id="gradAccValue">4</span></label>
+                                            <input type="range" id="trainGradAcc" min="1" max="32" value="4">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>训练轮数 (Epochs)</label>
+                                            <input type="number" id="trainEpochs" value="100" min="1">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Warmup步数</label>
+                                            <input type="number" id="trainWarmup" value="100" min="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>权重衰减</label>
+                                            <input type="number" id="trainWeightDecay" value="0.01" step="0.001" min="0">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>最大梯度范数</label>
+                                            <input type="number" id="trainMaxGradNorm" value="1.0" step="0.1" min="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>随机种子</label>
+                                            <input type="number" id="trainSeed" value="42">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>优化器</label>
+                                            <select id="trainOptimizer">
+                                                <option value="adamw" selected>AdamW</option>
+                                                <option value="adam">Adam</option>
+                                                <option value="sgd">SGD</option>
+                                                <option value="adafactor">Adafactor</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>学习率调度器</label>
+                                            <select id="trainScheduler">
+                                                <option value="cosine" selected>Cosine</option>
+                                                <option value="linear">Linear</option>
+                                                <option value="constant">Constant</option>
+                                                <option value="warmup_cosine">Warmup Cosine</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <h4 class="section-title">💾 保存与日志</h4>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>保存间隔 (Epochs)</label>
+                                            <input type="number" id="trainSaveEvery" value="10" min="1">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>日志间隔 (步)</label>
+                                            <input type="number" id="trainLogEvery" value="10" min="1">
+                                        </div>
+                                    </div>
+                                    <div class="form-row checkbox-row">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="trainGradCheckpoint" checked>
+                                            <span>梯度检查点 (节省显存)</span>
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="trainOffloadEncoder">
+                                            <span>卸载Encoder到CPU</span>
+                                        </label>
+                                    </div>
+
+                                    <h4 class="section-title">🎮 训练控制</h4>
+                                    <div class="form-row">
+                                        <button class="btn btn-primary btn-large" id="startTrainBtn">
+                                            🚀 开始训练
+                                        </button>
+                                        <button class="btn btn-secondary btn-large" id="estimateBtn">
+                                            📊 估算资源
+                                        </button>
+                                        <button class="btn btn-danger btn-large" id="stopTrainBtn" disabled>
+                                            ⏹️ 停止训练
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="train-panel" id="train-lokr" style="display: none;">
+                                    <p class="info-text">LoKr (Low-Rank Kronecker) 训练配置，参数与LoRA类似，但使用Kronecker积分解。</p>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>LoKr因子</label>
+                                            <input type="number" id="lokrFactor" value="8" min="1">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>预设配置</label>
+                                            <select id="lokrPreset">
+                                                <option value="recommended" selected>推荐配置</option>
+                                                <option value="vram_8gb">8GB显存</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-large full-width" id="startLokrTrainBtn">
+                                        🚀 开始LoKr训练
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="training-sidebar">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>📈 训练监控</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="trainMonitor">
+                                        <div class="monitor-placeholder">
+                                            <span class="monitor-icon">📊</span>
+                                            <p>暂无训练任务</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>💻 GPU状态</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="gpuStatus">
+                                        <div class="gpu-item">
+                                            <div class="gpu-info">
+                                                <span>GPU 显存</span>
+                                                <span id="gpuMemory">-- GB / -- GB</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" id="gpuMemoryBar" style="width: 0%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="gpu-item">
+                                            <div class="gpu-info">
+                                                <span>GPU 利用率</span>
+                                                <span id="gpuUtil">-- %</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" id="gpuUtilBar" style="width: 0%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-dataset">
+                    <div class="dataset-layout">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>📁 数据集管理</h3>
+                                <div class="card-actions">
+                                    <button class="btn btn-primary" id="importDataBtn">📥 导入音频</button>
+                                    <button class="btn btn-secondary" id="preprocessBtn">⚙️ 预处理</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="dataset-stats">
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="totalAudio">0</div>
+                                        <div class="stat-label">总音频数</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="totalDuration">0</div>
+                                        <div class="stat-label">总时长(分钟)</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="slicesCount">0</div>
+                                        <div class="stat-label">切片数</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="datasetSize">0</div>
+                                        <div class="stat-label">数据集大小</div>
+                                    </div>
+                                </div>
+
+                                <div class="dataset-filelist">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>文件名</th>
+                                                <th>时长</th>
+                                                <th>采样率</th>
+                                                <th>格式</th>
+                                                <th>状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="datasetTableBody">
+                                            <tr>
+                                                <td colspan="6" class="empty-table">暂无数据，请导入音频文件</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>⚙️ 预处理设置</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>目标采样率</label>
+                                        <select id="preprocessSampleRate">
+                                            <option value="16000">16000 Hz</option>
+                                            <option value="22050">22050 Hz</option>
+                                            <option value="32000" selected>32000 Hz</option>
+                                            <option value="44100">44100 Hz</option>
+                                            <option value="48000">48000 Hz</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>切片时长 (秒): <span id="sliceDurValue">30</span></label>
+                                        <input type="range" id="preprocessSliceDur" min="5" max="120" value="30">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>切片重叠 (秒): <span id="sliceOverlapValue">2</span></label>
+                                        <input type="range" id="preprocessSliceOverlap" min="0" max="10" value="2" step="0.5">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>目标格式</label>
+                                        <select id="preprocessFormat">
+                                            <option value="wav" selected>WAV</option>
+                                            <option value="flac">FLAC</option>
+                                            <option value="mp3">MP3</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="preprocessAugment" checked>
+                                        <span>数据增强 (音调/速度变换)</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="preprocessNormalize" checked>
+                                        <span>音频标准化</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-models">
+                    <div class="models-layout">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>🤖 可用模型</h3>
+                                <div class="card-actions">
+                                    <button class="btn btn-primary" id="downloadModelBtn">⬇️ 下载模型</button>
+                                    <button class="btn btn-secondary" id="refreshModelsBtn">🔄 刷新</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="model-grid" id="modelGrid">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>🧩 LoRA适配器</h3>
+                                <div class="card-actions">
+                                    <button class="btn btn-secondary" id="refreshLorasBtn">🔄 刷新</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="lora-list" id="loraList">
+                                    <p class="empty-text">暂无已训练的LoRA适配器</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-tasks">
+                    <div class="tasks-layout">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>📋 任务队列</h3>
+                                <div class="card-actions">
+                                    <button class="btn btn-secondary" id="refreshTasksBtn">🔄 刷新</button>
+                                    <button class="btn btn-danger" id="clearTasksBtn">🗑️ 清除已完成</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="server-stats" id="serverStats">
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="statTotal">0</div>
+                                        <div class="stat-label">总任务</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="statQueued">0</div>
+                                        <div class="stat-label">排队中</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="statRunning">0</div>
+                                        <div class="stat-label">运行中</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="statSucceeded">0</div>
+                                        <div class="stat-label">已完成</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="statFailed">0</div>
+                                        <div class="stat-label">失败</div>
+                                    </div>
+                                </div>
+                                <div class="task-list" id="taskList">
+                                    <p class="empty-text">暂无任务记录</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>🎵 生成结果</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="results-grid" id="resultsGrid">
+                                    <p class="empty-text">暂无生成结果</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-settings">
+                    <div class="settings-layout">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>⚙️ 服务器设置</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>API服务器地址</label>
+                                        <input type="text" id="apiHost" value="http://127.0.0.1:8001">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>API Key (可选)</label>
+                                        <input type="password" id="apiKey" placeholder="留空则不使用认证">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>轮询间隔 (秒)</label>
+                                        <input type="number" id="pollInterval" value="5" min="1" max="60">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>请求超时 (秒)</label>
+                                        <input type="number" id="requestTimeout" value="300" min="30" max="3600">
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" id="saveSettingsBtn">💾 保存设置</button>
+                                <button class="btn btn-secondary" id="testConnectionBtn">🔌 测试连接</button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>🎛️ 模型环境配置</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>主模型路径</label>
+                                        <input type="text" id="modelPath" value="acestep-v15-turbo">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>设备</label>
+                                        <select id="deviceSelect">
+                                            <option value="auto" selected>自动检测</option>
+                                            <option value="cuda">CUDA (NVIDIA GPU)</option>
+                                            <option value="mps">MPS (Apple Silicon)</option>
+                                            <option value="cpu">CPU</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row checkbox-row">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="flashAttn" checked>
+                                        <span>启用Flash Attention</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="offloadCpu">
+                                        <span>卸载模型到CPU (低显存)</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="initLlm" checked>
+                                        <span>初始化LM模型</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>ℹ️ 关于</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="about-section">
+                                    <h4>QS Music v1.0.0</h4>
+                                    <p>音乐风格学习与生成系统</p>
+                                    <p>基于 MusicGen + ACE-Step v1.5 双引擎</p>
+                                    <div class="tech-stack">
+                                        <span class="tech-tag">PyTorch</span>
+                                        <span class="tech-tag">Diffusion</span>
+                                        <span class="tech-tag">LoRA</span>
+                                        <span class="tech-tag">FastAPI</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="app.js"></script>
+</body>
+</html>

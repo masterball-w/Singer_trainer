@@ -152,6 +152,7 @@ PortableGit/
 .claude/skills/acestep-simplemv/scripts/public/
 .claude/scheduled_tasks.lock
 .claude/worktrees/
+*.zip
 
 # Keep directory structure
 !**/.gitkeep
