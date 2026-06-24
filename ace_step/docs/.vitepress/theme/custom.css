@@ -1,53 +1,648 @@
+/*
+ * QS Music / ACE-Step Documentation Theme
+ * Design System: Apple-inspired restrained minimalism
+ *
+ * Visual principles:
+ *   - Semantic-first low-saturation color system
+ *   - 8px grid with "loose outside, tight inside" spacing
+ *   - Card-based information carriers with 12px radius, single-direction shadow, no border
+ *   - 4-level heading + 3-level body text hierarchy (size + weight + gray-scale)
+ *   - Lightweight semantic animations (150-200ms ease-in-out)
+ *   - WCAG 2.1 AA contrast compliance
+ */
+
+/* ============================================================
+   1. DESIGN TOKENS (Apple-inspired palette)
+   ============================================================ */
+
 :root {
-  --vp-c-brand-1: #6366f1;
-  --vp-c-brand-2: #818cf8;
-  --vp-c-brand-3: #a5b4fc;
-  --vp-c-brand-soft: rgba(99, 102, 241, 0.14);
+  /* Brand primary - low saturation, 8-12% visual ratio */
+  --qs-brand: #007aff;
+  --qs-brand-hover: #0064d6;
+  --qs-brand-light: #e8f2ff;
+  --qs-brand-soft: rgba(0, 122, 255, 0.08);
+
+  /* Neutral gray scale - 8 levels for information hierarchy */
+  --qs-gray-50: #f5f5f7;
+  --qs-gray-100: #e8e8ed;
+  --qs-gray-200: #d2d2d7;
+  --qs-gray-300: #aeaeb2;
+  --qs-gray-400: #8e8e93;
+  --qs-gray-500: #6e6e73;
+  --qs-gray-600: #48484a;
+  --qs-gray-700: #3a3a3c;
+  --qs-gray-800: #1d1d1f;
+  --qs-gray-900: #000000;
+
+  /* Semantic state colors - muted tones */
+  --qs-success: #34c759;
+  --qs-success-bg: #e9f9ee;
+  --qs-warning: #ff9500;
+  --qs-warning-bg: #fff4e5;
+  --qs-error: #ff3b30;
+  --qs-error-bg: #ffecea;
+  --qs-info: #5ac8fa;
+  --qs-info-bg: #e5f6fd;
+
+  /* Typography - sans-serif, 4-level headings + 3-level body */
+  --qs-font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    'Helvetica Neue', 'PingFang SC', 'Noto Sans SC', sans-serif;
+  --qs-font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+
+  /* Heading sizes */
+  --qs-h1-size: 24px;
+  --qs-h1-weight: 700;
+  --qs-h1-color: var(--qs-gray-800);
+
+  --qs-h2-size: 20px;
+  --qs-h2-weight: 600;
+  --qs-h2-color: var(--qs-gray-800);
+
+  --qs-h3-size: 17px;
+  --qs-h3-weight: 600;
+  --qs-h3-color: var(--qs-gray-700);
+
+  --qs-h4-size: 15px;
+  --qs-h4-weight: 600;
+  --qs-h4-color: var(--qs-gray-700);
+
+  /* Body text sizes */
+  --qs-body-size: 14px;
+  --qs-body-weight: 400;
+  --qs-body-color: var(--qs-gray-600);
+
+  --qs-body-secondary-size: 13px;
+  --qs-body-secondary-color: var(--qs-gray-500);
+
+  --qs-caption-size: 12px;
+  --qs-caption-color: var(--qs-gray-400);
+
+  /* Spacing - 8px grid system */
+  --qs-space-1: 4px;
+  --qs-space-2: 8px;
+  --qs-space-3: 16px;
+  --qs-space-4: 24px;
+  --qs-space-5: 32px;
+  --qs-space-6: 48px;
+  --qs-space-7: 64px;
+
+  /* Card - 12px radius, single-direction shadow, no border */
+  --qs-card-radius: 12px;
+  --qs-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --qs-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
+
+  /* Animation */
+  --qs-transition-fast: 150ms ease-in-out;
+  --qs-transition-normal: 200ms ease-in-out;
+
+  /* Max content width for ultra-wide screens */
+  --qs-max-width: 1440px;
 }
 
-.dark {
-  --vp-c-brand-1: #818cf8;
-  --vp-c-brand-2: #a5b4fc;
-  --vp-c-brand-3: #c7d2fe;
-  --vp-c-brand-soft: rgba(129, 140, 248, 0.14);
-}
+/* ============================================================
+   2. VITEPRESS BRAND OVERRIDES
+   ============================================================ */
 
 :root {
+  --vp-c-brand-1: var(--qs-brand);
+  --vp-c-brand-2: var(--qs-brand-hover);
+  --vp-c-brand-3: #66abff;
+  --vp-c-brand-soft: var(--qs-brand-soft);
+
+  /* Hero gradient - subtle, low saturation */
   --vp-home-hero-name-color: transparent;
   --vp-home-hero-name-background: -webkit-linear-gradient(
     120deg,
-    #6366f1 30%,
-    #8b5cf6 70%
+    var(--qs-brand) 30%,
+    #5856d6 70%
   );
   --vp-home-hero-image-background-image: linear-gradient(
     -45deg,
-    #6366f1 50%,
-    #8b5cf6 50%
+    var(--qs-brand) 50%,
+    #5856d6 50%
   );
-  --vp-home-hero-image-filter: blur(44px);
+  --vp-home-hero-image-filter: blur(56px);
 }
 
-@media (min-width: 640px) {
-  :root {
-    --vp-home-hero-image-filter: blur(56px);
-  }
+.dark {
+  --vp-c-brand-1: #4da3ff;
+  --vp-c-brand-2: #66abff;
+  --vp-c-brand-3: #9fcbff;
+  --vp-c-brand-soft: rgba(77, 163, 255, 0.14);
+
+  --vp-home-hero-name-background: -webkit-linear-gradient(
+    120deg,
+    #4da3ff 30%,
+    #7c7aff 70%
+  );
 }
 
-@media (min-width: 960px) {
-  :root {
-    --vp-home-hero-image-filter: blur(68px);
-  }
+/* ============================================================
+   3. GLOBAL TYPOGRAPHY
+   ============================================================ */
+
+body {
+  font-family: var(--qs-font-sans);
+  font-size: var(--qs-body-size);
+  font-weight: var(--qs-body-weight);
+  color: var(--qs-body-color);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Nav logo: invert on light mode (logo is white-on-black) */
-:root .VPNavBarTitle .logo {
-  filter: invert(1);
+/* Headings - hierarchy through size + weight + gray-scale */
+h1, .vp-doc h1 {
+  font-size: var(--qs-h1-size);
+  font-weight: var(--qs-h1-weight);
+  color: var(--qs-h1-color);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin-top: var(--qs-space-6);
+  margin-bottom: var(--qs-space-3);
 }
-.dark .VPNavBarTitle .logo {
+
+h2, .vp-doc h2 {
+  font-size: var(--qs-h2-size);
+  font-weight: var(--qs-h2-weight);
+  color: var(--qs-h2-color);
+  letter-spacing: -0.005em;
+  line-height: 1.35;
+  margin-top: var(--qs-space-5);
+  margin-bottom: var(--qs-space-3);
+  padding-bottom: var(--qs-space-2);
+  border-bottom: 1px solid var(--qs-gray-100);
+}
+
+h3, .vp-doc h3 {
+  font-size: var(--qs-h3-size);
+  font-weight: var(--qs-h3-weight);
+  color: var(--qs-h3-color);
+  line-height: 1.4;
+  margin-top: var(--qs-space-4);
+  margin-bottom: var(--qs-space-2);
+}
+
+h4, .vp-doc h4 {
+  font-size: var(--qs-h4-size);
+  font-weight: var(--qs-h4-weight);
+  color: var(--qs-h4-color);
+  line-height: 1.45;
+  margin-top: var(--qs-space-3);
+  margin-bottom: var(--qs-space-2);
+}
+
+p, .vp-doc p {
+  font-size: var(--qs-body-size);
+  color: var(--qs-body-color);
+  line-height: 1.7;
+  margin-bottom: var(--qs-space-3);
+}
+
+/* Secondary text */
+small, .vp-doc small,
+.vp-doc .tip p,
+.vp-doc .warning p,
+.vp-doc .danger p {
+  font-size: var(--qs-body-secondary-size);
+  color: var(--qs-body-secondary-color);
+}
+
+/* Caption / meta text */
+.vp-doc .info,
+.vp-doc blockquote p {
+  font-size: var(--qs-caption-size);
+  color: var(--qs-caption-color);
+}
+
+/* Code blocks */
+code {
+  font-family: var(--qs-font-mono);
+  font-size: 13px;
+}
+
+pre code {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Links - brand color only for interactive text */
+a {
+  color: var(--qs-brand);
+  text-decoration: none;
+  transition: color var(--qs-transition-fast);
+}
+
+a:hover {
+  color: var(--qs-brand-hover);
+}
+
+/* ============================================================
+   4. NAVIGATION BAR
+   ============================================================ */
+
+.VPNav {
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  background: rgba(255, 255, 255, 0.72);
+  border-bottom: 1px solid var(--qs-gray-100);
+  transition: background var(--qs-transition-normal);
+}
+
+.dark .VPNav {
+  background: rgba(28, 28, 30, 0.72);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.VPNavBar .title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--qs-gray-800);
+  letter-spacing: -0.01em;
+}
+
+.dark .VPNavBar .title {
+  color: var(--qs-gray-50);
+}
+
+/* Nav links */
+.VPNavBarMenuLink {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--qs-gray-600);
+  transition: color var(--qs-transition-fast);
+}
+
+.VPNavBarMenuLink:hover {
+  color: var(--qs-gray-800);
+}
+
+.VPNavBarMenuLink.active {
+  color: var(--qs-brand);
+}
+
+/* Nav logo */
+.VPNavBarTitle .logo {
   filter: none;
 }
 
-/* Hero image: round corners */
-.VPImage.image-src {
-  border-radius: 16px;
+/* ============================================================
+   5. SIDEBAR
+   ============================================================ */
+
+.VPSidebar {
+  border-right: 1px solid var(--qs-gray-100);
+}
+
+.dark .VPSidebar {
+  border-right-color: rgba(255, 255, 255, 0.06);
+}
+
+.VPSidebarItem .text {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--qs-gray-500);
+  transition: color var(--qs-transition-fast);
+}
+
+.VPSidebarItem.is-active > .item > .indicator::before {
+  background-color: var(--qs-brand);
+}
+
+.VPSidebarItem.is-active > .item > .link > .text {
+  font-weight: 600;
+  color: var(--qs-gray-800);
+}
+
+.dark .VPSidebarItem.is-active > .item > .link > .text {
+  color: var(--qs-gray-50);
+}
+
+.VPSidebarItem .link:hover .text {
+  color: var(--qs-gray-700);
+}
+
+/* ============================================================
+   6. CONTENT AREA - CARDS & CONTAINERS
+   ============================================================ */
+
+/* Custom containers (tips, warnings, etc.) - card style */
+.vp-doc .custom-block {
+  border-radius: var(--qs-card-radius);
+  border: none;
+  box-shadow: var(--qs-card-shadow);
+  padding: var(--qs-space-3) var(--qs-space-4);
+  transition: box-shadow var(--qs-transition-normal);
+}
+
+.vp-doc .custom-block:hover {
+  box-shadow: var(--qs-card-shadow-hover);
+}
+
+.vp-doc .custom-block.tip {
+  background: var(--qs-success-bg);
+  color: var(--qs-gray-700);
+}
+
+.vp-doc .custom-block.warning {
+  background: var(--qs-warning-bg);
+  color: var(--qs-gray-700);
+}
+
+.vp-doc .custom-block.danger {
+  background: var(--qs-error-bg);
+  color: var(--qs-gray-700);
+}
+
+.vp-doc .custom-block.info {
+  background: var(--qs-info-bg);
+  color: var(--qs-gray-700);
+}
+
+.vp-doc .custom-block .custom-block-title {
+  font-size: var(--qs-h4-size);
+  font-weight: var(--qs-h4-weight);
+  color: var(--qs-gray-800);
+  margin-bottom: var(--qs-space-2);
+}
+
+/* Blockquotes */
+blockquote {
+  border-left: 3px solid var(--qs-gray-200);
+  border-radius: 0 var(--qs-card-radius) var(--qs-card-radius) 0;
+  background: var(--qs-gray-50);
+  padding: var(--qs-space-3) var(--qs-space-4);
+  margin: var(--qs-space-3) 0;
+}
+
+.dark blockquote {
+  background: rgba(255, 255, 255, 0.04);
+  border-left-color: var(--qs-gray-700);
+}
+
+/* Tables - card style */
+.vp-doc table {
+  border-radius: var(--qs-card-radius);
+  overflow: hidden;
+  box-shadow: var(--qs-card-shadow);
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.vp-doc table th {
+  background: var(--qs-gray-50);
+  font-size: var(--qs-caption-size);
+  font-weight: 600;
+  color: var(--qs-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: var(--qs-space-2) var(--qs-space-3);
+  border-bottom: 1px solid var(--qs-gray-100);
+}
+
+.dark .vp-doc table th {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--qs-gray-400);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.vp-doc table td {
+  padding: var(--qs-space-2) var(--qs-space-3);
+  font-size: var(--qs-body-size);
+  color: var(--qs-body-color);
+  border-bottom: 1px solid var(--qs-gray-100);
+}
+
+.dark .vp-doc table td {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.vp-doc table tr:last-child td {
+  border-bottom: none;
+}
+
+/* ============================================================
+   7. HOME PAGE
+   ============================================================ */
+
+.VPHome {
+  padding-bottom: var(--qs-space-7);
+}
+
+.VPHero {
+  padding-top: var(--qs-space-7);
+  padding-bottom: var(--qs-space-6);
+}
+
+.VPHero .name {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.VPHero .text {
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--qs-gray-500);
+  line-height: 1.6;
+  max-width: 560px;
+}
+
+.VPHero .actions .VPButton {
+  border-radius: 980px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 24px;
+  transition: transform var(--qs-transition-fast), box-shadow var(--qs-transition-fast);
+}
+
+.VPHero .actions .VPButton.primary {
+  background: var(--qs-brand);
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 122, 255, 0.2);
+}
+
+.VPHero .actions .VPButton.primary:hover {
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
+}
+
+.VPHero .actions .VPButton.secondary {
+  border: 1px solid var(--qs-gray-200);
+  color: var(--qs-gray-700);
+}
+
+.VPHero .actions .VPButton.secondary:hover {
+  border-color: var(--qs-gray-300);
+  transform: scale(0.97);
+}
+
+.VPFeatures {
+  padding-top: var(--qs-space-5);
+}
+
+.VPFeature {
+  /* Card style */
+  background: var(--qs-card-bg, transparent);
+  border-radius: var(--qs-card-radius);
+  padding: var(--qs-space-3);
+  transition: transform var(--qs-transition-normal), box-shadow var(--qs-transition-normal);
+}
+
+.VPFeature:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--qs-card-shadow-hover);
+}
+
+.VPFeature .title {
+  font-size: var(--qs-h4-size);
+  font-weight: var(--qs-h4-weight);
+  color: var(--qs-gray-800);
+}
+
+.VPFeature .details {
+  font-size: var(--qs-body-secondary-size);
+  color: var(--qs-gray-500);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   8. CODE BLOCKS
+   ============================================================ */
+
+.vp-doc div[class*='language-'] {
+  border-radius: var(--qs-card-radius);
+  border: none;
+  box-shadow: var(--qs-card-shadow);
+}
+
+.vp-doc div[class*='language-'] code {
+  font-family: var(--qs-font-mono);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+/* Copy button */
+.vp-doc div[class*='language-'] .copy {
+  border-radius: 6px;
+  transition: opacity var(--qs-transition-fast);
+}
+
+/* Inline code */
+.vp-doc :not(pre) > code {
+  background: var(--qs-gray-100);
+  color: var(--qs-gray-700);
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.dark .vp-doc :not(pre) > code {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--qs-gray-300);
+}
+
+/* ============================================================
+   9. SEARCH
+   ============================================================ */
+
+.VPLocalSearchBox input {
+  border-radius: var(--qs-card-radius);
+  border: 1px solid var(--qs-gray-200);
+  font-size: var(--qs-body-size);
+  transition: border-color var(--qs-transition-fast), box-shadow var(--qs-transition-fast);
+}
+
+.VPLocalSearchBox input:focus {
+  border-color: var(--qs-brand);
+  box-shadow: 0 0 0 3px var(--qs-brand-soft);
+  outline: none;
+}
+
+/* ============================================================
+   10. FOOTER
+   ============================================================ */
+
+.VPFooter {
+  border-top: 1px solid var(--qs-gray-100);
+}
+
+.dark .VPFooter {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.VPFooter .message,
+.VPFooter .copyright {
+  font-size: var(--qs-caption-size);
+  color: var(--qs-gray-400);
+}
+
+/* ============================================================
+   11. RESPONSIVE - MAX WIDTH FOR ULTRA-WIDE SCREENS
+   ============================================================ */
+
+@media (min-width: 1440px) {
+  .VPContent .container {
+    max-width: var(--qs-max-width);
+    margin: 0 auto;
+  }
+}
+
+/* ============================================================
+   12. INTERACTION ANIMATIONS
+   ============================================================ */
+
+/* Button press effect */
+.VPButton:active {
+  transform: scale(0.95);
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background: var(--qs-brand-soft);
+  color: var(--qs-gray-800);
+}
+
+/* ============================================================
+   13. SCROLLBAR (WebKit)
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--qs-gray-200);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--qs-gray-300);
+}
+
+/* ============================================================
+   14. SKELETON LOADING PLACEHOLDER
+   ============================================================ */
+
+@keyframes qs-skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+[data-v-inspector] .loading .skeleton {
+  background: var(--qs-gray-100);
+  border-radius: var(--qs-card-radius);
+  animation: qs-skeleton-pulse 1.5s ease-in-out infinite;
 }

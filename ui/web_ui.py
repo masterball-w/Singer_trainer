@@ -133,9 +133,20 @@ def create_app():
 
     # ===== 构建 UI 界面 =====
 
+    # Load custom theme CSS
+    _theme_css_path = Path(__file__).parent / "gradio_theme.css"
+    _custom_css = _theme_css_path.read_text(encoding="utf-8") if _theme_css_path.exists() else ""
+
     with gr.Blocks(
         title="QS Music - 音乐风格迁移与生成",
-        theme=gr.themes.Soft(),
+        theme=gr.themes.Soft(
+            primary_hue=210,
+            secondary_hue=220,
+            neutral_hue=220,
+            font=[gr.themes.GoogleFont(name="Inter"), "system-ui", "sans-serif"],
+            font_mono=[gr.themes.GoogleFont(name="JetBrains Mono"), "monospace"],
+        ),
+        css=_custom_css,
     ) as app:
 
         gr.Markdown(
